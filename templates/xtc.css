@@ -1,0 +1,27 @@
+#position label {
+	height: 48px;
+	padding-left: 58px;
+	padding-top: 14px;
+	display: inline-block;
+}
+
+#position label[for=position_0] {
+	background: url('images/position_0.png') top left no-repeat;
+}
+
+#position label[for=position_1] {
+	background: url('images/position_1.png') top left no-repeat;
+}
+
+#position label[for=position_2] {
+	background: url('images/position_2.png') top left no-repeat;
+}
+
+#position label[for=position_3] {
+	background: url('images/position_3.png') top left no-repeat;
+}
+
+input#position_0, input#position_1, input#position_2, input#position_3 {
+	margin-top: 14px;
+	float: left;
+}

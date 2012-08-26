@@ -1,0 +1,47 @@
+// 
+// English Language File for TagCloud Plugin
+//
+
+<!-- language file start -->
+obj_xtc#:#Tag Cloud
+objs_xtc#:#Tag Cloud
+obj_xtc_duplicate#:#Copy
+objs_xtc_duplicate#:#Copy Tag Cloud
+obj_xtc_select#:#Select Tag Cloud
+xtc_add#:#Add Tag Cloud
+xtc_new#:#Add New Tag Cloud
+xtc_read#:#Read access to Tag Cloud
+xtc_write#:#Edit Tag Cloud
+xtc_delete#:#Delete Tag Cloud
+xtc_visible#:#Tag Cloud is visible
+xtc_edit_permission#:#Change permission settings
+crs_create_xtc#:#Create Tag Cloud
+grp_create_xtc#:#Create Tag Cloud
+fold_create_xtc#:#Create Tag Cloud
+root_create_xtc#:#Create Tag Cloud
+cat_create_xtc#:#Create Tag Cloud
+numbers_and_sizes#:#Number and size settings
+max_nr_of_tags#:#Maximum number of tags
+max_nr_of_tags_desc#:#Please enter the maximum number of tags in the tag cloud. If the tag cloud contains more tags than the maximum number of tags, the tags with the smallest number hits will be removed from the cloud. If you enter 0, all tags will be shown.
+nr_of_sizes#:#Number of tag sizes
+nr_of_sizes_desc#:#Please enter the number of tag sizes in the frontend. Every group of tags gets its own tag size in the frontend. The tag sizes will be given as CSS selectors size1, size2, size3, ...
+tag_classname#:#Use tag classname
+tag_classname_desc#:#Adds an additional CSS class class for every tag which contains the tag name. Use this extra class name for additional styling of tags via CSS. Spaces in the tag names will be replaced with underscores in the CSS class names.
+additional_tag_lists#:#Additional tag lists
+related#:#Show related tags
+related_desc#:#Select this option to show all related tags of a previously selected tag.
+topten#:#Top 10 Tags
+topten_desc#:#Show the Top 10 Tags above the tag cloud
+tagcloud#:#Tag Cloud.
+filter_settings#:#Filter settings
+filter_own#:#My tags only
+filter_own_desc#:#Shows your own tags only in the tag cloud.
+filter_objects#:#Filter by object type
+filter_objects_desc#:#Show only tags of the selected objects. If 'All objects' is selected, all available tags will be shown.
+all_objects#:#All objects
+some_objects#:#Selected objects
+position#:#Position
+position_right#:#Tag Cloud right
+position_left#:#Tag Cloud left
+position_top#:#Tag Cloud top
+position_bottom#:#Tag Cloud bottom
