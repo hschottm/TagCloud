@@ -49,3 +49,5 @@ position_top#:#Tag Cloud oben
 position_bottom#:#Tag Cloud unten
 all_tags#:#Alle Auszeichnungen
 tag_title_description#:#Titel/Beschreibung
+select_tag#:#Bitte wählen Sie eine Auszeichnung aus, um die dazugehörigen Ergebnisse in einer Liste angezeigt zu bekommen.
+number_of_results#:#%d Treffer

@@ -49,3 +49,5 @@ position_top#:#Tag Cloud top
 position_bottom#:#Tag Cloud bottom
 all_tags#:#All tags
 tag_title_description#:#Title/Description
+select_tag#:#Please select a tag to show the corresponding results in a list.
+number_of_results#:#%d hits

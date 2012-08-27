@@ -303,9 +303,6 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 		$op2->addSubItem($object_selection);
 		$object_selection->setInfo($this->txt("filter_objects_desc"));
 		$this->form->addItem($filter_objects);
-//		$empty = new ilCustomInputGUI('', 'placeholder');
-//		$empty->addSubItem($object_selection);
-//		$this->form->addItem($empty);
 
 		$this->form->addCommandButton("updateProperties", $this->txt("save"));
 
@@ -435,16 +432,26 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 		$lr = (strlen($_GET['related'])) ? preg_split("/,/", $_GET['related']) : array();
 		$at = array_merge(array($_GET['tag']), $lr);
 
-		$templatelist->setVariable("CONTENT_HEADING", ilUtil::prepareFormOutput(implode(' + ', $at)));
 		$results = $this->object->getFilteredResults($at);
-		$this->plugin->includeClass("class.ilTagResultPresentation.php");
-		$presentation = new ilTagResultPresentation($this, ilTagResultPresentation::MODE_STANDARD);
-		$presentation->setResults($results);
-		$presentation->setSubitemIds(array());
-		$presentation->setPreviousNext("#", "#");
-		if($presentation->render())
+		if (count($results) == 0)
 		{
-			$templatelist->setVariable('CONTENT_LIST',$presentation->getHTML(true));
+			$emptyresults = $this->plugin->getTemplate("tpl.emptyresults.html");
+			$emptyresults->setVariable('SELECT_TAG_TEXT', $this->txt('select_tag'));
+			$templatelist->setVariable('CONTENT_LIST',$emptyresults->get());
+		}
+		else
+		{
+			$templatelist->setVariable("CONTENT_HEADING", ilUtil::prepareFormOutput(implode(' + ', $at)));
+			$templatelist->setVariable("NUMBER_OF_RESULTS", sprintf($this->txt('number_of_results'), count($results)));
+			$this->plugin->includeClass("class.ilTagResultPresentation.php");
+			$presentation = new ilTagResultPresentation($this, ilTagResultPresentation::MODE_STANDARD);
+			$presentation->setResults($results);
+			$presentation->setSubitemIds(array());
+			$presentation->setPreviousNext("#", "#");
+			if($presentation->render())
+			{
+				$templatelist->setVariable('CONTENT_LIST',$presentation->getHTML(true));
+			}
 		}
 		
 		$template = $this->plugin->getTemplate("tpl.tagcloud.html");
