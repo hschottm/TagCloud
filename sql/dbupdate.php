@@ -28,6 +28,16 @@ if (!$ilDB->tableExists('rep_robj_xtc_object'))
 		'length'  => 1,
 		'notnull' => true,
 		'default' => 0),
+	'expandedalltags'   => array(
+		'type' => 'integer',
+		'length'  => 1,
+		'notnull' => true,
+		'default' => 1),
+	'expandedtopten'   => array(
+		'type' => 'integer',
+		'length'  => 1,
+		'notnull' => true,
+		'default' => 1),
 	'max_nr_of_tags'   => array(
 		'type' => 'integer',
 		'length'  => 4,
@@ -47,12 +57,12 @@ if (!$ilDB->tableExists('rep_robj_xtc_object'))
 		'type' => 'integer',
 		'length'  => 1,
 		'notnull' => true,
-		'default' => 0),
+		'default' => 1),
 	'topten'   => array(
 		'type' => 'integer',
 		'length'  => 1,
 		'notnull' => true,
-		'default' => 0)
+		'default' => 1)
 	);
 	$ilDB->createTable('rep_robj_xtc_object', $fields);
 	$ilDB->addIndex("rep_robj_xtc_object", array("xtc_fi"), "i1");

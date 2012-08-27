@@ -106,7 +106,7 @@ ul.cloud li a:hover span
 	color:#fff!important;
 }
 
-.mod_tagcloud .toggle-button
+.toggle-button
 {
 	padding-left:20px;
 	background-image:url("images/del_sprite_arrows.gif");
@@ -116,7 +116,7 @@ ul.cloud li a:hover span
 	cursor:pointer;
 }
 
-.mod_tagcloud .yes
+.yes
 {
 	padding-left:20px;
 	background-image:url("images/del_sprite_arrows.gif");
@@ -126,17 +126,17 @@ ul.cloud li a:hover span
 	cursor:pointer;
 }
 
-.mod_tagcloud .off
+.off
 {
 	padding-left:20px;
 	background:none;
 	cursor:default;
 }
 
-.mod_tagcloud h3
+.toggle-bar
 {
 	background-color:#e9e9e9;
-	font-weight:bold;
+	font-weight:normal;
 	font-size:90%;
 	color:#666666;
 }

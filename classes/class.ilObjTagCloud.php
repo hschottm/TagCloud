@@ -29,17 +29,13 @@ class ilObjTagCloud extends ilObjectPlugin
 	protected $nr_of_sizes;
 	protected $tag_classname;
 	protected $related;
+	protected $expandedalltags;
+	protected $expandedtopten;
 	protected $topten;
 	protected $filter_own;
 	protected $filter_objects;
 	protected $object_selection;
-
-	protected $forTable = "";
-	protected $strTagTable = "tl_tag";
-	protected $strTagField = "tag";
 	protected $arrCloudTags = array();
-	protected $arrPages = array();
-	protected $arrArticles = array();
 	
 	/**
 	* Constructor
@@ -92,8 +88,10 @@ class ilObjTagCloud extends ilObjectPlugin
 		$this->setValueForProperty(0, 'max_nr_of_tags');
 		$this->setValueForProperty(4, 'nr_of_sizes');
 		$this->setValueForProperty(1, 'tag_classname');
-		$this->setValueForProperty(0, 'related');
-		$this->setValueForProperty(0, 'topten');
+		$this->setValueForProperty(1, 'related');
+		$this->setValueForProperty(1, 'expandedalltags');
+		$this->setValueForProperty(1, 'expandedtopten');
+		$this->setValueForProperty(1, 'topten');
 		$this->setValueForProperty(0, 'filter_objects');
 		$this->doUpdate();
 	}
@@ -147,8 +145,8 @@ class ilObjTagCloud extends ilObjectPlugin
 			array('integer'),
 			array($this->getId())
 		);
-		$result = $ilDB->manipulateF("INSERT INTO rep_robj_xtc_object (xtc_fi, position, filtertype, filter_objects, filter_own, max_nr_of_tags, nr_of_sizes, tag_classname, related, topten) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-			array('integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'text', 'integer', 'integer'),
+		$result = $ilDB->manipulateF("INSERT INTO rep_robj_xtc_object (xtc_fi, position, filtertype, filter_objects, filter_own, max_nr_of_tags, nr_of_sizes, tag_classname, related, topten, expandedalltags, expandedtopten) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			array('integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'text', 'integer', 'integer', 'integer', 'integer'),
 			array(
 				$this->getId(), 
 				$this->valueForProperty('position'),
@@ -159,7 +157,9 @@ class ilObjTagCloud extends ilObjectPlugin
 				$this->valueForProperty('nr_of_sizes'),
 				$this->valueForProperty('tag_classname'),
 				$this->valueForProperty('related'),
-				$this->valueForProperty('topten')
+				$this->valueForProperty('topten'),
+				$this->valueForProperty('expandedalltags'),
+				$this->valueForProperty('expandedtopten')
 			)
 		);
 		
@@ -297,7 +297,7 @@ class ilObjTagCloud extends ilObjectPlugin
 			}
 			if ($this->filter_own == 1)
 			{
-				array_push($filters, 'user_id = ' . $ilDB->quote($ilUser->getId(), 'integer'));
+				array_push($filters, 'user_id = ' . $ilDB->quote(ilObject::_lookupOwner($this->getId()), 'integer'));
 			}
 			$inids = $ilDB->in('obj_id', $ids, false, 'integer');
 			if (count($filters) > 0)
@@ -341,7 +341,7 @@ class ilObjTagCloud extends ilObjectPlugin
 			}
 			if ($this->filter_own == 1)
 			{
-				array_push($filters, 'user_id = ' . $ilDB->quote($ilUser->getId(), 'integer'));
+				array_push($filters, 'user_id = ' . $ilDB->quote(ilObject::_lookupOwner($this->getId()), 'integer'));
 			}
 			if (count($filters) > 0)
 			{
@@ -351,7 +351,7 @@ class ilObjTagCloud extends ilObjectPlugin
 			{
 				$filtertext = '';
 			}
-			$result = $ilDB->query("SELECT tag tag_name, obj_id, obj_type, sub_obj_id, sub_obj_type, user_id, is_offline, COUNT(tag) as tag_count FROM il_tag GROUP BY tag $filtertext ORDER BY tag ASC");
+			$result = $ilDB->query("SELECT tag tag_name, obj_id, obj_type, sub_obj_id, sub_obj_type, user_id, is_offline, COUNT(tag) as tag_count FROM il_tag $filtertext GROUP BY tag ORDER BY tag ASC");
 			$tags = array();
 			if ($result->numRows() > 0)
 			{
@@ -374,6 +374,87 @@ class ilObjTagCloud extends ilObjectPlugin
 		usort($list, array($this, "tag_asort"));
 		if (count($list) > 10) $list = array_reverse(array_slice($list, -10, 10));
 		return $list;
+	}
+
+	public function getFilteredResults($for_tags)
+	{
+		global $ilDB;
+		global $ilAccess;
+		global $ilUser;
+		
+		if (!is_array($for_tags)) return array();
+
+		$ids = array();
+		for ($i = 0; $i < count($for_tags); $i++)
+		{
+			$result = $ilDB->queryF("SELECT DISTINCT obj_id FROM il_tag WHERE tag = %s ORDER BY obj_id ASC",
+				array('text'),
+				array($for_tags[$i])
+			);
+			$arr = array();
+			if ($result->numRows() > 0)
+			{
+				while ($row = $ilDB->fetchAssoc($result))
+				{
+					array_push($arr, $row['obj_id']);
+				}
+			}
+			if ($i == 0)
+			{
+				$ids = $arr;
+			}
+			else
+			{
+				$ids = array_intersect($ids, $arr);
+			}
+		}
+
+		$arrCloudTags = array();
+		if (count($ids))
+		{
+			$filters = array();
+			if ($this->filter_objects == 1 && count($this->object_selection))
+			{
+				array_push($filters, $ilDB->in('obj_type', $this->object_selection, false, 'text'));
+			}
+			if ($this->filter_own == 1)
+			{
+				array_push($filters, 'user_id = ' . $ilDB->quote(ilObject::_lookupOwner($this->getId()), 'integer'));
+			}
+			$inids = $ilDB->in('obj_id', $ids, false, 'integer');
+			if (count($filters) > 0)
+			{
+				$filtertext = 'WHERE ' . implode('AND', $filters) . ' AND ' . $inids;
+			}
+			else
+			{
+				$filtertext = 'WHERE ' . $inids;
+			}
+			$result = $ilDB->query("SELECT DISTINCT(obj_id), obj_type, sub_obj_id, sub_obj_type, user_id, is_offline FROM il_tag $filtertext ORDER BY tag ASC");
+			$tags = array();
+			if ($result->numRows() > 0)
+			{
+				while ($row = $ilDB->fetchAssoc($result))
+				{
+						// Check referenced objects
+						foreach(ilObject::_getAllReferences($row['obj_id']) as $ref_id)
+						{
+							// RBAC check
+							if($ilAccess->checkAccessOfUser($ilUser->getId(),
+																  'visible',
+																  '',
+																  $ref_id,
+																  $row['obj_type'],
+																  $row['obj_id']))
+							{
+								$tags[$ref_id] = $row['obj_id'];
+							}
+						}
+				}
+			}
+			$arrCloudTags = $tags;
+		}
+		return $arrCloudTags;
 	}
 
 	public function tag_asort($tag1, $tag2)

@@ -32,6 +32,8 @@ related#:#Show related tags
 related_desc#:#Select this option to show all related tags of a previously selected tag.
 topten#:#Top 10 Tags
 topten_desc#:#Show the Top 10 Tags above the tag cloud
+expandedtopten#:#Expand Top 10 Tags
+expandedalltags#:#Expand Tag Cloud
 tagcloud#:#Tag Cloud.
 filter_settings#:#Filter settings
 filter_own#:#My tags only
@@ -45,3 +47,5 @@ position_right#:#Tag Cloud right
 position_left#:#Tag Cloud left
 position_top#:#Tag Cloud top
 position_bottom#:#Tag Cloud bottom
+all_tags#:#All tags
+tag_title_description#:#Title/Description

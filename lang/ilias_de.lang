@@ -32,6 +32,8 @@ related#:#Zugehörige Auszeichnungen
 related_desc#:#Wählen Sie diese Option aus, um bei einer ausgewählten Auszeichnung die zu dieser Auszeichnung zugehörigen Auszeichnungen in einer Liste anzuzeigen.
 topten#:#Top 10 Auszeichnungen
 topten_desc#:#Die Top 10 Auszeichnungen über der Tag Cloud ausgeben.
+expandedtopten#:#Top 10 Auszeichnungen sind aufgeklappt
+expandedalltags#:#Tag Cloud ist aufgeklappt
 tagcloud#:#Tag Cloud
 filter_settings#:#Filter-Einstellungen
 filter_own#:#Nur eigene Auszeichnungen anzeigen
@@ -45,3 +47,5 @@ position_right#:#Tag Cloud rechts
 position_left#:#Tag Cloud links
 position_top#:#Tag Cloud oben
 position_bottom#:#Tag Cloud unten
+all_tags#:#Alle Auszeichnungen
+tag_title_description#:#Titel/Beschreibung
