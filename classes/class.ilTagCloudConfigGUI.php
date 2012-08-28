@@ -67,7 +67,7 @@ class ilTagCloudConfigGUI extends ilPluginConfigGUI
 		{
 			$respect_permissions->setChecked(true);
 		}
-		$respect_permissions->setOptionTitle($pl->txt("tcl_respect_permissions_title"))
+		$respect_permissions->setOptionTitle($pl->txt("tcl_respect_permissions_title"));
 		$form->addItem($respect_permissions);
 				
 		return $form;
