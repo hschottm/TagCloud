@@ -53,3 +53,11 @@ select_tag#:#Bitte wählen Sie eine Auszeichnung aus, um die dazugehörigen Erge
 number_of_results#:#%d Treffer
 filtertype#:#Übergeordneter Container
 filtertype_desc#:#Nur Auszeichnungen ab und unterhalb des übergeordneten Containers dieser Tag Cloud berücksichtigen. D.h. wenn Sie z.B. diese Tag Cloud in einem Kurs verwenden, werden nur Auszeichnungen verwendet, die innerhalb dieses Kurses vergeben wurden.
+filter_special#:#Größenkriterien
+filter_special_desc#:#Abhängig vom gewählten Kriterium werden die Größen der Auszeichnungen berechnet. Standardeinstellung ist die Häufigkeit der verwendeten Auszeichnungen.
+input_frequency#:#Häufigkeit der verwendeten Auszeichnungen
+visiting_frequency#:#Am häufigsten besuchte Objekte
+plugin_configuration#:#Plugin-Einstellungen
+respect_permissions_title#:#Nur eigene Auszeichnungen verwenden
+respect_permissions#:#Rechteeinstellungen
+configuration_saved#:#Einstellungen gespeichert

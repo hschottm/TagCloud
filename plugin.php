@@ -4,7 +4,7 @@
 $id = "xtc";
  
 // code version; must be changed for all code changes
-define('xtc_version', '1.0.0');
+define('xtc_version', '1.0.1');
 $version = xtc_version;
  
 // ilias min and max version; must always reflect the versions that should

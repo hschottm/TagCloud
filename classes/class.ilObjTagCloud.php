@@ -33,6 +33,7 @@ class ilObjTagCloud extends ilObjectPlugin
 	protected $expandedalltags;
 	protected $expandedtopten;
 	protected $topten;
+	protected $filter_special;
 	protected $filter_own;
 	protected $filter_objects;
 	protected $object_selection;
@@ -95,6 +96,7 @@ class ilObjTagCloud extends ilObjectPlugin
 		$this->setValueForProperty(1, 'expandedtopten');
 		$this->setValueForProperty(1, 'topten');
 		$this->setValueForProperty(0, 'filter_objects');
+		$this->setValueForProperty(0, 'filter_special');
 		$this->doUpdate();
 	}
 	
@@ -147,8 +149,8 @@ class ilObjTagCloud extends ilObjectPlugin
 			array('integer'),
 			array($this->getId())
 		);
-		$result = $ilDB->manipulateF("INSERT INTO rep_robj_xtc_object (xtc_fi, position, filtertype, filter_objects, filter_own, max_nr_of_tags, nr_of_sizes, tag_classname, related, topten, expandedalltags, expandedtopten) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-			array('integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'text', 'integer', 'integer', 'integer', 'integer'),
+		$result = $ilDB->manipulateF("INSERT INTO rep_robj_xtc_object (xtc_fi, position, filtertype, filter_objects, filter_own, max_nr_of_tags, nr_of_sizes, tag_classname, related, topten, expandedalltags, expandedtopten, filter_special) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+			array('integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer', 'text', 'integer', 'integer', 'integer', 'integer', 'integer'),
 			array(
 				$this->getId(), 
 				$this->valueForProperty('position'),
@@ -161,7 +163,8 @@ class ilObjTagCloud extends ilObjectPlugin
 				$this->valueForProperty('related'),
 				$this->valueForProperty('topten'),
 				$this->valueForProperty('expandedalltags'),
-				$this->valueForProperty('expandedtopten')
+				$this->valueForProperty('expandedtopten'),
+				$this->valueForProperty('filter_special')
 			)
 		);
 		
@@ -382,6 +385,18 @@ class ilObjTagCloud extends ilObjectPlugin
 			}
 			$result = $ilDB->query("SELECT tag tag_name, obj_id, obj_type, sub_obj_id, sub_obj_type, user_id, is_offline, COUNT(tag) as tag_count FROM il_tag $filtertext GROUP BY tag ORDER BY tag ASC");
 			$tags = array();
+			$obj_stat = array();
+			if (1 == $this->filter_special)
+			{
+				$sp_result = $ilDB->query("SELECT obj_id, count(obj_id) as obj_count from obj_stat_log WHERE obj_id IN (SELECT DISTINCT(obj_id) FROM il_tag) GROUP BY obj_id");
+				if ($sp_result->numRows() > 0)
+				{
+					while ($sp_row = $ilDB->fetchAssoc($sp_result))
+					{
+						$obj_stat[$sp_row['obj_id']] = $sp_row['obj_count'];
+					}
+				}
+			}
 			if ($result->numRows() > 0)
 			{
 				$parent_id = (int) $tree->getParentId($this->getRefId());
@@ -407,6 +422,17 @@ class ilObjTagCloud extends ilObjectPlugin
 							}
 							if ($continue)
 							{
+								if (1 == $this->filter_special)
+								{
+									if (array_key_exists($row['obj_id'], $obj_stat))
+									{
+										$row['tag_count'] = $obj_stat[$row['obj_id']];
+									}
+									else
+									{
+										$row['tag_count'] = 1;
+									}
+								}
 								array_push($tags, $row);
 							}
 						}

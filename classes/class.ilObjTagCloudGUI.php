@@ -308,6 +308,16 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 		$filtertype->setInfo($this->txt("filtertype_desc"));
 		$this->form->addItem($filtertype);
 
+		$filter_special = new ilRadioGroupInputGUI($this->txt('filter_special'), 'filter_special');
+		$sp1 = new ilRadioOption($this->txt('input_frequency'), '0');
+		$sp1->setValue(0);
+		$filter_special->addOption($sp1);
+		$sp2 = new ilRadioOption($this->txt('visiting_frequency'), '1');
+		$sp2->setValue(1);
+		$filter_special->addOption($sp2);
+		$filter_special->setInfo($this->txt("filter_special_desc"));
+		$this->form->addItem($filter_special);
+
 		$this->form->addCommandButton("updateProperties", $this->txt("save"));
 
 		$this->form->setTitle($this->txt("edit_properties"));
@@ -321,7 +331,7 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 	{
 		$values["title"] = $this->object->getTitle();
 		$values["desc"] = $this->object->getDescription();
-		$properties = array('position', 'filtertype', 'filter_own', 'max_nr_of_tags', 'nr_of_sizes', 'tag_classname', 'related', 'topten', 'expandedalltags', 'expandedtopten', 'filter_objects', 'object_selection');
+		$properties = array('position', 'filtertype', 'filter_own', 'max_nr_of_tags', 'nr_of_sizes', 'tag_classname', 'related', 'topten', 'expandedalltags', 'expandedtopten', 'filter_objects', 'object_selection', 'filter_special');
 		foreach ($properties as $property)
 		{
 			$values[$property] = $this->object->valueForProperty($property);
@@ -341,7 +351,7 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 		{
 			$this->object->setTitle($this->form->getInput("title"));
 			$this->object->setDescription($this->form->getInput("desc"));
-			$properties = array('position', 'filtertype', 'filter_own', 'max_nr_of_tags', 'nr_of_sizes', 'tag_classname', 'related', 'topten', 'filter_objects', 'object_selection', 'expandedalltags', 'expandedtopten');
+			$properties = array('position', 'filtertype', 'filter_own', 'max_nr_of_tags', 'nr_of_sizes', 'tag_classname', 'related', 'topten', 'filter_objects', 'object_selection', 'expandedalltags', 'expandedtopten', 'filter_special');
 			foreach ($properties as $property)
 			{
 				$this->object->setValueForProperty($this->form->getInput($property), $property);

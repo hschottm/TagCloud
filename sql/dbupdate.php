@@ -98,3 +98,16 @@ if (!$ilDB->tableExists('rep_robj_xtc_fltobjs'))
 	$ilDB->addIndex("rep_robj_xtc_fltobjs", array("obj_type"), "i2");
 }
 ?>
+<#4>
+<?php
+if(!$ilDB->tableColumnExists('rep_robj_xtc_object', 'filter_special'))
+{
+	$ilDB->addTableColumn("rep_robj_xtc_object",	"filter_special",
+		array(
+			'type' => 'integer',
+			'length'  => 4,
+			'notnull' => true,
+			'default' => 0)
+	);
+}
+?>

@@ -53,3 +53,11 @@ select_tag#:#Please select a tag to show the corresponding results in a list.
 number_of_results#:#%d hits
 filtertype#:#Parent Container
 filtertype_desc#:#Only use tags from the parent container for this tag cloud. E.g. if you place this tag cloud into a course, only tags of this course will be used.
+filter_special#:#Size options
+filter_special_desc#:#Depending on the selected option, the size of the tags will be calculated. The default option calculates the size based on the tag frequency.
+input_frequency#:#Tag frequency
+visiting_frequency#:#Most visited objects
+plugin_configuration#:#Plugin Configuration
+respect_permissions_title#:#Use own tags only
+respect_permissions#:#Permission settings
+configuration_saved#:#Configuration saved

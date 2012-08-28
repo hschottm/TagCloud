@@ -58,16 +58,16 @@ class ilTagCloudConfigGUI extends ilPluginConfigGUI
 		$form = new ilPropertyFormGUI();
 		$form->addCommandButton("save", $lng->txt("save"));
 	                
-		$form->setTitle($pl->txt("tcl_plugin_configuration"));
+		$form->setTitle($pl->txt("plugin_configuration"));
 		$form->setFormAction($ilCtrl->getFormAction($this));
 	
-		$respect_permissions = new ilCheckboxInputGUI($pl->txt("tcl_respect_permissions"), "respect_permissions");
+		$respect_permissions = new ilCheckboxInputGUI($pl->txt("respect_permissions"), "respect_permissions");
 		$respect_permissions->setValue(1);
 		if (ilObjTagCloud::_getConfigurationValue('respect_permissions') == 1)
 		{
 			$respect_permissions->setChecked(true);
 		}
-		$respect_permissions->setOptionTitle($pl->txt("tcl_respect_permissions_title"));
+		$respect_permissions->setOptionTitle($pl->txt("respect_permissions_title"));
 		$form->addItem($respect_permissions);
 				
 		return $form;
@@ -88,7 +88,7 @@ class ilTagCloudConfigGUI extends ilPluginConfigGUI
 		{
 			$pl->includeClass("class.ilObjTagCloud.php");
 			ilObjTagCloud::_setConfiguration('respect_permissions', $_POST['respect_permissions']);
-			ilUtil::sendSuccess($pl->txt("tcl_configuration_saved"), true);
+			ilUtil::sendSuccess($pl->txt("configuration_saved"), true);
 			$ilCtrl->redirect($this, "configure");
 		}
 		else
