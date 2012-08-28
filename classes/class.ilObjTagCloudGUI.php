@@ -304,6 +304,10 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 		$object_selection->setInfo($this->txt("filter_objects_desc"));
 		$this->form->addItem($filter_objects);
 
+		$filtertype = new ilCheckboxInputGUI($this->txt('filtertype'), 'filtertype');
+		$filtertype->setInfo($this->txt("filtertype_desc"));
+		$this->form->addItem($filtertype);
+
 		$this->form->addCommandButton("updateProperties", $this->txt("save"));
 
 		$this->form->setTitle($this->txt("edit_properties"));
@@ -447,7 +451,7 @@ class ilObjTagCloudGUI extends ilObjectPluginGUI
 			$presentation = new ilTagResultPresentation($this, ilTagResultPresentation::MODE_STANDARD);
 			$presentation->setResults($results);
 			$presentation->setSubitemIds(array());
-			$presentation->setPreviousNext("#", "#");
+//			$presentation->setPreviousNext("#", "#");
 			if($presentation->render())
 			{
 				$templatelist->setVariable('CONTENT_LIST',$presentation->getHTML(true));

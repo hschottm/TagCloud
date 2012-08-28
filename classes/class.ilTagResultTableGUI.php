@@ -27,8 +27,10 @@ class ilTagResultTableGUI extends ilTable2GUI
 		$this->presenter = $a_presenter;
 		parent::__construct($a_parent_obj, $a_parent_cmd);
 		$this->setLimit(999);
-		$this->addColumn($this->lng->txt("type"), "", "1");
-		$this->addColumn($this->plugin->txt("tag_title_description"), "");
+		$this->addColumn($this->lng->txt("type"), "type", "1");
+		$this->addColumn($this->plugin->txt("tag_title_description"), "title");
+		$this->setDefaultOrderField("type");
+		$this->setDefaultOrderDirection("asc");
 		if($this->enabledRelevance())
 		{
 			#$this->addColumn($this->lng->txt('lucene_relevance_short'),'s_relevance','50px');
@@ -39,6 +41,8 @@ class ilTagResultTableGUI extends ilTable2GUI
 		$this->addColumn($this->lng->txt("actions"), "", "10px");
 		
 		$this->setEnableHeader(true);
+		$ilCtrl->saveParameter($a_parent_obj, "tag");
+		$ilCtrl->saveParameter($a_parent_obj, "related");
 		$this->setFormAction($ilCtrl->getFormAction($a_parent_obj));
 		$this->setRowTemplate("tpl.search_result_row.html", "Services/Search");
 		//$this->disable("footer");

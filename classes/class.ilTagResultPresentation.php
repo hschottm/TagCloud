@@ -227,7 +227,6 @@ class ilTagResultPresentation
 		$this->next = $a_n;
 	}
 	
-	
 	/**
 	 * Render item list 
 	 * @return void
@@ -278,8 +277,8 @@ class ilTagResultPresentation
 
 		$ilBench->start('Lucene','2900_tb');
 		include_once("./Services/Search/classes/class.ilSearchResultTableGUI.php");
-		$result_table = new ilTagResultTableGUI($this->container, "showSavedResults", $this);
-		$result_table->setCustomPreviousNext($this->prev, $this->next);
+		$result_table = new ilTagResultTableGUI($this->container, "tagcloud", $this);
+//		$result_table->setCustomPreviousNext($this->prev, $this->next);
 		
 		$result_table->setData($set);
 		$this->thtml = $result_table->getHTML();

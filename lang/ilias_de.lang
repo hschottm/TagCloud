@@ -51,3 +51,5 @@ all_tags#:#Alle Auszeichnungen
 tag_title_description#:#Titel/Beschreibung
 select_tag#:#Bitte wählen Sie eine Auszeichnung aus, um die dazugehörigen Ergebnisse in einer Liste angezeigt zu bekommen.
 number_of_results#:#%d Treffer
+filtertype#:#Übergeordneter Container
+filtertype_desc#:#Nur Auszeichnungen ab und unterhalb des übergeordneten Containers dieser Tag Cloud berücksichtigen. D.h. wenn Sie z.B. diese Tag Cloud in einem Kurs verwenden, werden nur Auszeichnungen verwendet, die innerhalb dieses Kurses vergeben wurden.

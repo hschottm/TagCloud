@@ -8,10 +8,11 @@ define("CLOUD_POSITION_LEFT", 2);
 define("CLOUD_POSITION_TOP", 3);
 
 define("CLOUD_FILTER_NONE", 0);
-define("CLOUD_FILTER_COURSE", 1);
-define("CLOUD_FILTER_GROUP", 2);
-define("CLOUD_FILTER_CATEGORY", 4);
-define("CLOUD_FILTER_FOLDER", 8);
+define("CLOUD_FILTER_PARENT", 1);
+define("CLOUD_FILTER_COURSE", 2);
+define("CLOUD_FILTER_GROUP", 4);
+define("CLOUD_FILTER_CATEGORY", 8);
+define("CLOUD_FILTER_FOLDER", 16);
 
 /**
 * Application class for gallery repository object.
@@ -36,6 +37,7 @@ class ilObjTagCloud extends ilObjectPlugin
 	protected $filter_objects;
 	protected $object_selection;
 	protected $arrCloudTags = array();
+	protected $obj_ids;
 	
 	/**
 	* Constructor
@@ -150,7 +152,7 @@ class ilObjTagCloud extends ilObjectPlugin
 			array(
 				$this->getId(), 
 				$this->valueForProperty('position'),
-				0,//$this->valueForProperty('filtertype'),
+				$this->valueForProperty('filtertype'),
 				$this->valueForProperty('filter_objects'),
 				$this->valueForProperty('filter_own'),
 				$this->valueForProperty('max_nr_of_tags'),
@@ -259,6 +261,9 @@ class ilObjTagCloud extends ilObjectPlugin
 	public function getRelatedTagList($for_tags)
 	{
 		global $ilDB;
+		global $tree;
+		global $ilAccess;
+		global $ilUser;
 		
 		if (!is_array($for_tags)) return array();
 
@@ -312,11 +317,32 @@ class ilObjTagCloud extends ilObjectPlugin
 			$tags = array();
 			if ($result->numRows() > 0)
 			{
+				$parent_id = (int) $tree->getParentId($this->getRefId());
 				while ($row = $ilDB->fetchAssoc($result))
 				{
-					if (!in_array($row['tag_name'], $for_tags))
+					foreach(ilObject::_getAllReferences($row['obj_id']) as $ref_id)
 					{
-						array_push($tags, $row);
+						// RBAC check
+						if($ilAccess->checkAccessOfUser($ilUser->getId(),
+															  'visible',
+															  '',
+															  $ref_id,
+															  $row['obj_type'],
+															  $row['obj_id']))
+						{
+							$continue = true;
+							if (1 == $this->filtertype)
+							{
+								if (!$tree->isGrandChild($parent_id, $ref_id))
+								{
+									$continue = false;
+								}
+							}
+							if ($continue)
+							{
+								array_push($tags, $row);
+							}
+						}
 					}
 				}
 			}
@@ -331,6 +357,9 @@ class ilObjTagCloud extends ilObjectPlugin
 	public function getTagList()
 	{
 		global $ilDB;
+		global $tree;
+		global $ilAccess;
+		global $ilUser;
 		
 		if (count($this->arrCloudTags) == 0)
 		{
@@ -355,9 +384,33 @@ class ilObjTagCloud extends ilObjectPlugin
 			$tags = array();
 			if ($result->numRows() > 0)
 			{
+				$parent_id = (int) $tree->getParentId($this->getRefId());
 				while ($row = $ilDB->fetchAssoc($result))
 				{
-					array_push($tags, $row);
+					foreach(ilObject::_getAllReferences($row['obj_id']) as $ref_id)
+					{
+						// RBAC check
+						if($ilAccess->checkAccessOfUser($ilUser->getId(),
+															  'visible',
+															  '',
+															  $ref_id,
+															  $row['obj_type'],
+															  $row['obj_id']))
+						{
+							$continue = true;
+							if (1 == $this->filtertype)
+							{
+								if (!$tree->isGrandChild($parent_id, $ref_id))
+								{
+									$continue = false;
+								}
+							}
+							if ($continue)
+							{
+								array_push($tags, $row);
+							}
+						}
+					}
 				}
 			}
 			if (count($tags))
@@ -381,6 +434,7 @@ class ilObjTagCloud extends ilObjectPlugin
 		global $ilDB;
 		global $ilAccess;
 		global $ilUser;
+		global $tree;
 		
 		if (!is_array($for_tags)) return array();
 
@@ -434,29 +488,41 @@ class ilObjTagCloud extends ilObjectPlugin
 			$tags = array();
 			if ($result->numRows() > 0)
 			{
+				$parent_id = (int) $tree->getParentId($this->getRefId());
 				while ($row = $ilDB->fetchAssoc($result))
 				{
-						// Check referenced objects
-						foreach(ilObject::_getAllReferences($row['obj_id']) as $ref_id)
+					// Check referenced objects
+					foreach(ilObject::_getAllReferences($row['obj_id']) as $ref_id)
+					{
+						// RBAC check
+						if($ilAccess->checkAccessOfUser($ilUser->getId(),
+															  'visible',
+															  '',
+															  $ref_id,
+															  $row['obj_type'],
+															  $row['obj_id']))
 						{
-							// RBAC check
-							if($ilAccess->checkAccessOfUser($ilUser->getId(),
-																  'visible',
-																  '',
-																  $ref_id,
-																  $row['obj_type'],
-																  $row['obj_id']))
+							$continue = true;
+							if (1 == $this->filtertype)
+							{
+								if (!$tree->isGrandChild($parent_id, $ref_id))
+								{
+									$continue = false;
+								}
+							}
+							if ($continue)
 							{
 								$tags[$ref_id] = $row['obj_id'];
 							}
 						}
+					}
 				}
 			}
 			$arrCloudTags = $tags;
 		}
 		return $arrCloudTags;
 	}
-
+	
 	public function tag_asort($tag1, $tag2)
 	{
 		if($tag1['tag_count'] == $tag2['tag_count'])

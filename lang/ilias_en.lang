@@ -51,3 +51,5 @@ all_tags#:#All tags
 tag_title_description#:#Title/Description
 select_tag#:#Please select a tag to show the corresponding results in a list.
 number_of_results#:#%d hits
+filtertype#:#Parent Container
+filtertype_desc#:#Only use tags from the parent container for this tag cloud. E.g. if you place this tag cloud into a course, only tags of this course will be used.
